@@ -39,7 +39,7 @@ class Robot:
         self.robot_x = 0.0
         self.robot_y = 0.0
 
-        self.target_point = None  # Добавим переменную для хранения целевой точки
+        self.target_point = None
 
     def get_triangle_vertex_coordinates(self) -> tuple | None:
         """Return the triangle corner coordinates."""
@@ -152,7 +152,6 @@ class Robot:
     def plan(self) -> None:
         """Plan the robot's actions."""
         if self.target_point is not None:
-            # Если цель уже определена, не вычисляем её заново
             return
 
         triangle_points = self.get_triangle_vertex_coordinates()
@@ -190,33 +189,25 @@ class Robot:
         current_x, current_y, current_theta = self.get_robot_pose()
         target_x, target_y = self.target_point
 
-        # Вычисляем разницу по X и Y
         dx = target_x - current_x
         dy = target_y - current_y
 
-        # Используем atan2 для правильного вычисления угла
         target_angle = math.atan2(dy, dx)
 
-        # Вычисление угловой скорости
         Kp_angle = 1.0
         angular_velocity = Kp_angle * (target_angle - current_theta)
 
-        # Ограничиваем угловую скорость для предотвращения слишком быстрых вращений
         angular_velocity = max(min(angular_velocity, 1.0), -1.0)
 
-        # Вычисление дистанции до цели
         distance = math.hypot(dx, dy)
         Kp_distance = 0.5
         linear_velocity = Kp_distance * distance
 
-        # Ограничиваем линейную скорость
         linear_velocity = max(min(linear_velocity, 1.0), -1.0)
 
-        # Скорости для моторов
         left_speed = linear_velocity - angular_velocity * self.WHEEL_BASE / 2
         right_speed = linear_velocity + angular_velocity * self.WHEEL_BASE / 2
 
-        # Если дистанция до цели очень маленькая, останавливаем робота
         if distance < 0.05:
             self.robot.set_left_motor_velocity(0)
             self.robot.set_right_motor_velocity(0)
