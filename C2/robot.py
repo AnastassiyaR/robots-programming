@@ -47,7 +47,6 @@ class Robot:
         self.done = False
         self.turn_speed = 0.4
 
-        # Новые параметры для realistic-режима
         self.realistic_torque = 0.1
         self.realistic_speed_divider = 15
         self.realistic_min_speed = 0.05
@@ -102,7 +101,6 @@ class Robot:
             print(f"Reached the {self.target_color} target object.")
             self.set_target_speeds(0, 0)
 
-            # Переход к следующему цвету
             self._rotate_target_color()
             self.state = "init"
 
@@ -151,7 +149,7 @@ class Robot:
                     (red_channel > threshold) &
                     (green_channel > threshold) &
                     (blue_channel < threshold) &
-                    (np.abs(red_channel - green_channel) < 50)  # жёлтый должен быть сбалансирован между red и green
+                    (np.abs(red_channel - green_channel) < 50)
             )
 
         labeled_mask, num_features = scipy.ndimage.label(mask)
@@ -172,7 +170,7 @@ class Robot:
             self.width = width
 
             aspect_ratio = width / height if height > 0 else 0
-            if aspect_ratio > 0.6:  # ограничение для цилиндра
+            if aspect_ratio > 0.6:
                 continue
 
             area = width * height
@@ -270,9 +268,9 @@ class Robot:
     def calculate_distance_to_object(self) -> float:
         """Estimate distance based on object's pixel height."""
         if self.object_image_height_z is None or self.object_image_height_z == 0:
-            return float('inf')  # если объект не найден
+            return float('inf')
 
-        k = 20.0  # эмпирическая константа — подбирается под эксперимент
+        k = 20.0
         distance = k / self.object_image_height_z
         print(
             f"self.object_image_height_z {self.object_image_height_z}, self.max {self.max}, self.min {self.min}, img_height {self.img_height}")

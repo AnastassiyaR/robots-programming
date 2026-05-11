@@ -12,7 +12,7 @@ class Robot:
         """
         self.robot = robot
 
-    # Add more code ....
+
     def sense(self) -> None:
         """Gather sensor data.
 

@@ -46,7 +46,6 @@ class Robot:
         self.done = False
         self.turn_speed = 0.4
 
-        # Новые параметры для realistic-режима
         self.realistic_torque = 0.1
         self.realistic_speed_divider = 15
         self.realistic_min_speed = 0.05
